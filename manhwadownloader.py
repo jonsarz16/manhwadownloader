@@ -16,33 +16,37 @@ def installff():
   os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
 
 _ = installff()
-URL = st.text_input('Input URL')
+
 opts = FirefoxOptions()
 opts.add_argument("--headless")
 browser = webdriver.Firefox(options=opts)
-browser.get(URL)
+URL = st.text_input('Input URL')
 
-all_links = browser.find_elements(By.TAG_NAME, 'img')
-datalist = []
-for links in all_links:
-  x = links.get_attribute("src")
-  if "252" in x:
-    datalist.append(x)
-output_folder = "/app/manhwadownloader"
+if URL:
+    
+  browser.get(URL)
 
-for index, item in enumerate(datalist):
-  response = requests.get(item)
-  if response.status_code:
-    fp = open(f"{output_folder}/{index + 1}.png", 'wb')
-    fp.write(response.content)
-    fp.close()
+  all_links = browser.find_elements(By.TAG_NAME, 'img')
+  datalist = []
+  for links in all_links:
+    x = links.get_attribute("src")
+    if "252" in x:
+      datalist.append(x)
+  output_folder = "/app/manhwadownloader"
 
-shutil.make_archive("trk", 'zip', output_folder)
+  for index, item in enumerate(datalist):
+    response = requests.get(item)
+    if response.status_code:
+      fp = open(f"{output_folder}/{index + 1}.png", 'wb')
+      fp.write(response.content)
+      fp.close()
 
-with open("trk.zip", "rb") as file:
-    btn = st.download_button(
-            label="Download image",
-            data=file,
-            file_name="trk.zip",
-            mime="application/zip"
-          )
+  shutil.make_archive("trk", 'zip', output_folder)
+
+  with open("trk.zip", "rb") as file:
+      btn = st.download_button(
+              label="Download image",
+              data=file,
+              file_name="trk.zip",
+              mime="application/zip"
+            )
