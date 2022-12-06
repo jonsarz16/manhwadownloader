@@ -8,15 +8,10 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.firefox import GeckoDriverManager
-
 import requests
 import shutil
 
-TIMEOUT = 20
-
-st.title("Test Selenium")
-st.markdown("You should see some random Football match text below in about 21 seconds")
-
+TIMEOUT = 2
 firefoxOptions = Options()
 firefoxOptions.add_argument("--headless")
 service = Service(GeckoDriverManager().install())
@@ -26,28 +21,13 @@ driver = webdriver.Firefox(
 )
 # URL = "https://luminousscans.com/tomb-raider-king-chapter-252/"
 URL = st.text_input('Input URL')
-
 driver.get(URL)
-
-# try:
-#     WebDriverWait(driver, TIMEOUT).until(
-#         EC.visibility_of_element_located((By.XPATH, XPATH,))
-#     )
-
-# except TimeoutException:
-#     st.warning("Timed out waiting for page to load")
-#     driver.quit()
-
-# time.sleep(10)
-
 all_links = driver.find_elements(By.TAG_NAME, 'img')
-
 datalist = []
 for links in all_links:
   x = links.get_attribute("src")
   if "252" in x:
     datalist.append(x)
-
 output_folder = "/app/manhwadownloader"
 
 for index, item in enumerate(datalist):
