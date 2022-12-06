@@ -1,6 +1,6 @@
 import streamlit as st
 import os, sys
-
+URL = st.text_input('Input URL')
 @st.experimental_singleton
 def installff():
   os.system('sbase install geckodriver')
@@ -13,7 +13,7 @@ opts = FirefoxOptions()
 opts.add_argument("--headless")
 browser = webdriver.Firefox(options=opts)
 
-browser.get('https://luminousscans.com/tomb-raider-king-chapter-252/')
+browser.get(URL)
 st.write(browser.page_source)
 
 
@@ -57,7 +57,7 @@ st.write(browser.page_source)
 
 
 # # URL = "https://luminousscans.com/tomb-raider-king-chapter-252/"
-# URL = st.text_input('Input URL')
+#
 # driver.get(URL)
 # all_links = driver.find_elements(By.TAG_NAME, 'img')
 # datalist = []
