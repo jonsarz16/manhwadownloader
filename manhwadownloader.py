@@ -1,14 +1,22 @@
 import streamlit as st
+from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+import requests
+import shutil
 import os, sys
-URL = st.text_input('Input URL')
+
+
+
 @st.experimental_singleton
 def installff():
   os.system('sbase install geckodriver')
   os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
 
 _ = installff()
-from selenium import webdriver
-from selenium.webdriver import FirefoxOptions
+URL = st.text_input('Input URL')
 opts = FirefoxOptions()
 opts.add_argument("--headless")
 browser = webdriver.Firefox(options=opts)
