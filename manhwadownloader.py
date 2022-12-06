@@ -22,7 +22,7 @@ opts.add_argument("--headless")
 browser = webdriver.Firefox(options=opts)
 browser.get(URL)
 
-all_links = driver.find_elements(By.TAG_NAME, 'img')
+all_links = browser.find_elements(By.TAG_NAME, 'img')
 datalist = []
 for links in all_links:
   x = links.get_attribute("src")
