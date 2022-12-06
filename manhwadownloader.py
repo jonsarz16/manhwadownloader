@@ -1,5 +1,7 @@
 import streamlit as st
 import os, sys
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 URL = st.text_input('Input URL')
 @st.experimental_singleton
 def installff():
@@ -13,54 +15,55 @@ opts = FirefoxOptions()
 opts.add_argument("--headless")
 browser = webdriver.Firefox(options=opts)
 
-browser.get(URL)
-st.write(browser.page_source)
+x = browser.get(URL)
+st.write(x)
 
+all_links = driver.find_elements(By.TAG_NAME, 'img')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # URL = "https://luminousscans.com/tomb-raider-king-chapter-252/"
-#
-# driver.get(URL)
-# all_links = driver.find_elements(By.TAG_NAME, 'img')
+st.write(all_links)
 # datalist = []
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# URL = "https://luminousscans.com/tomb-raider-king-chapter-252/"
+
+
 # for links in all_links:
 #   x = links.get_attribute("src")
 #   if "252" in x:
