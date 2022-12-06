@@ -1,29 +1,46 @@
 import streamlit as st
-
-# URL = "https://luminousscans.com/tomb-raider-king-chapter-252/"
-URL = st.text_input('Input URL')
-
-!pip install selenium
-!apt-get update # to update ubuntu to correctly run apt install
-!apt install chromium-chromedriver
-!cp /usr/lib/chromium-browser/chromedriver /usr/bin
-
-import sys
-sys.path.insert(0,'/usr/lib/chromium-browser/chromedriver')
+import time
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.firefox import GeckoDriverManager
+
 import requests
 import shutil
 
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
-wd = webdriver.Chrome('chromedriver',options=options)
-wd.get(URL)
-# wd.page_source
-all_links = wd.find_elements(By.TAG_NAME, 'img')
+TIMEOUT = 20
+
+st.title("Test Selenium")
+st.markdown("You should see some random Football match text below in about 21 seconds")
+
+firefoxOptions = Options()
+firefoxOptions.add_argument("--headless")
+service = Service(GeckoDriverManager().install())
+driver = webdriver.Firefox(
+    options=firefoxOptions,
+    service=service,
+)
+# URL = "https://luminousscans.com/tomb-raider-king-chapter-252/"
+URL = st.text_input('Input URL')
+
+driver.get(URL)
+
+# try:
+#     WebDriverWait(driver, TIMEOUT).until(
+#         EC.visibility_of_element_located((By.XPATH, XPATH,))
+#     )
+
+# except TimeoutException:
+#     st.warning("Timed out waiting for page to load")
+#     driver.quit()
+
+# time.sleep(10)
+
+all_links = driver.find_elements(By.TAG_NAME, 'img')
 
 datalist = []
 for links in all_links:
@@ -31,7 +48,7 @@ for links in all_links:
   if "252" in x:
     datalist.append(x)
 
-output_folder = "/content/saved"
+output_folder = "/app/manhwadownloader"
 
 for index, item in enumerate(datalist):
   response = requests.get(item)
@@ -41,3 +58,11 @@ for index, item in enumerate(datalist):
     fp.close()
 
 shutil.make_archive("trk", 'zip', output_folder)
+
+with open("trk.zip", "rb") as file:
+    btn = st.download_button(
+            label="Download image",
+            data=file,
+            file_name="trk.zip",
+            mime="application/zip"
+          )
